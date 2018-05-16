@@ -14,12 +14,12 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SwiftAsyncBlur" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="FastSwiftBlur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="city" translatesAutoresizingMaskIntoConstraints="NO" id="7dj-TT-qBd" customClass="AsyncBlurImageView" customModule="SwiftAsyncBlur" customModuleProvider="target">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="city" translatesAutoresizingMaskIntoConstraints="NO" id="7dj-TT-qBd" customClass="FastBlurImageView" customModule="FastSwiftBlur" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="375" height="375"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="7dj-TT-qBd" secondAttribute="height" multiplier="1:1" id="yGW-U2-hDs"/>
@@ -41,7 +41,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="imageView" destination="7dj-TT-qBd" id="Dxr-qb-L0L"/>
+                        <outlet property="imageView" destination="7dj-TT-qBd" id="zKi-3y-hSA"/>
                         <outlet property="slider" destination="brI-XN-yFa" id="lf0-Dm-bgb"/>
                     </connections>
                 </viewController>
