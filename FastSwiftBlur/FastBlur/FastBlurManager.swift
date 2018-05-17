@@ -75,9 +75,7 @@ extension FastBlurManager {
 // MARK: Util methods
 
 /*
-* Realize queue for blurring
-* Step 1:
-* Step 2:
+* Queue implementation for blurring
 */
 fileprivate extension FastBlurManager {
 
@@ -189,7 +187,7 @@ fileprivate class FastBlurTask: CustomStringConvertible {
 
     /*
     * Calls blurring method.
-    * Depends on image holder it calculates size for image scale
+    * Depends of image holder it calculates size for image scale
     */
     func getBlurredImage() -> UIImage? {
         let imageViewSizeInPixels: CGSize

@@ -8,24 +8,30 @@
 
 import UIKit
 
+/*
+* Simple controller for demo
+*/
 class ViewController: UIViewController {
 
+    // MARK: outlets
     @IBOutlet weak var imageView: FastBlurImageView!
     @IBOutlet weak var slider: UISlider!
-    
+
+    // --
+
     override func viewDidLoad() {
         super.viewDidLoad()
         slider.addTarget(self, action: #selector(sliderDidScroll(slider:)), for: UIControlEvents.valueChanged)
     }
-    
+
+    // -- Handlers
+
     @objc func sliderDidScroll(slider: UISlider) {
         let maxBlur:Float = 35
         let currentBlurRadius = slider.value * maxBlur
         log("View Controller: set blur radius to \(currentBlurRadius)")
         self.imageView.blurRadius = currentBlurRadius
     }
-
-    
 
 }
 

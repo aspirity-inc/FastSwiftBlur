@@ -74,12 +74,12 @@
 			path = FastBlur;
 			sourceTree = "<group>";
 		};
-		62DE934406F73D09919FDA14 /* Utlis */ = {
+		62DE934406F73D09919FDA14 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
 				94F0F65D20AC2BD700FB5A76 /* Logger.swift */,
 			);
-			path = Utlis;
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		94AEF29F20AC1256007EA97A = {
@@ -110,7 +110,7 @@
 				94AEF2B420AC1256007EA97A /* LaunchScreen.storyboard */,
 				94AEF2B720AC1256007EA97A /* Info.plist */,
 				62DE91DA2EF1223C01B5EA8D /* FastBlur */,
-				62DE934406F73D09919FDA14 /* Utlis */,
+				62DE934406F73D09919FDA14 /* Utils */,
 			);
 			path = FastSwiftBlur;
 			sourceTree = "<group>";

@@ -44,13 +44,19 @@ class FastBlurWorker {
 
 }
 
+// --
 
 extension UIImage {
 
+    /*
+    * Workaround for vImageTentConvolve
+    * It uses cache for input source
+    */
     func fastBlur(radius: Float, scaledTo size: CGSize, cache: FastBlurImageCache? = nil) -> UIImage {
         guard radius > 0 else {
             return self
         }
+        // -- setup for input
         guard let sourceCGImage: CGImage = self.cgImage else {
             log("error: sourceRef is nil")
             return self
@@ -63,12 +69,15 @@ extension UIImage {
             return self
         }
 
+        // -- setup for output
         let pixelBuffer = malloc(srcBuffer.rowBytes * Int(srcBuffer.height))
         defer {
             free(pixelBuffer)
         }
 
         var outBuffer = vImage_Buffer(data: pixelBuffer, height: srcBuffer.height, width: srcBuffer.width, rowBytes: srcBuffer.rowBytes)
+
+        // -- do blur
 
         var boxSize = UInt32(floor(radius * FastBlurConsts.GAUSIAN_TO_TENT_RADIUS_RADIO))
         boxSize |= 1;
@@ -80,6 +89,7 @@ extension UIImage {
             return self
         }
 
+        // -- make result image
         var format = FastBlurConsts.arg888format()
         guard let cgResult = vImageCreateCGImageFromBuffer(&outBuffer, &format, nil, nil, vImage_Flags(kvImageNoFlags), nil) else {
             log("error in create image from buffer: \(error)")
@@ -93,11 +103,20 @@ extension UIImage {
 
 }
 
+// --
+
+/*
+* Workaround for vImage_Buffer. It is cached input source for vImageTentConvolve
+*/
 class FastBlurImageCache {
 
     private(set) var scaledNonBlurredBuffer: vImage_Buffer?
 
+    /*
+    * Check scale needs, it it necessary than it scales via vImageScale
+    */
     init(source: CGImage, scaledToSize: CGSize) {
+        // -- set up input
         var srcBuffer = vImage_Buffer()
 
         var format = FastBlurConsts.arg888format()
@@ -109,6 +128,7 @@ class FastBlurImageCache {
             return
         }
 
+        // -- scale needs
         var ratio: CGFloat = 1
         let sourceWidth = CGFloat(source.width)
         let sourceHeight = CGFloat(source.height)
@@ -119,27 +139,27 @@ class FastBlurImageCache {
 
         if ratio == 1 {
             scaledNonBlurredBuffer = srcBuffer
-            return
+        } else {
+            // -- do scale
+            let dstWidth = vImagePixelCount(sourceWidth * ratio)
+            let dstHeight = vImagePixelCount(sourceHeight * ratio)
+            let dstBytesPerPixel = source.bytesPerRow / source.width
+            let dstBytesPerRow = dstBytesPerPixel * Int(dstWidth)
+            let dstData = malloc( dstBytesPerRow * Int(dstHeight) )
+
+            var dstBuffer = vImage_Buffer(data: dstData, height: dstHeight, width: dstWidth, rowBytes: dstBytesPerRow)
+
+            error = vImageScale_ARGB8888(&srcBuffer, &dstBuffer, nil, UInt32(kvImageHighQualityResampling))
+            free(srcBuffer.data)
+
+            guard error == vImage_Error(kvImageNoError) else {
+                log("error in scale image: \(error)")
+                free(dstData)
+                return
+            }
+
+            scaledNonBlurredBuffer = dstBuffer
         }
-
-        let dstWidth = vImagePixelCount(sourceWidth * ratio)
-        let dstHeight = vImagePixelCount(sourceHeight * ratio)
-        let dstBytesPerPixel = source.bytesPerRow / source.width
-        let dstBytesPerRow = dstBytesPerPixel * Int(dstWidth)
-        let dstData = malloc( dstBytesPerRow * Int(dstHeight) )
-
-        var dstBuffer = vImage_Buffer(data: dstData, height: dstHeight, width: dstWidth, rowBytes: dstBytesPerRow)
-
-        error = vImageScale_ARGB8888(&srcBuffer, &dstBuffer, nil, UInt32(kvImageHighQualityResampling))
-        free(srcBuffer.data)
-
-        guard error == vImage_Error(kvImageNoError) else {
-            log("error in scale image: \(error)")
-            free(dstData)
-            return
-        }
-
-        scaledNonBlurredBuffer = dstBuffer
     }
 
     deinit {
@@ -149,6 +169,8 @@ class FastBlurImageCache {
     }
 
 }
+
+// --
 
 fileprivate class FastBlurConsts {
 

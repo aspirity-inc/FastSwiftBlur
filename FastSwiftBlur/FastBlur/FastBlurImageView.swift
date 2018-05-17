@@ -5,18 +5,25 @@
 
 import UIKit
 
-
+/*
+* Customized UIImageView for blur method
+*/
 class FastBlurImageView: UIImageView {
 
+    // --
     static let ANIMATION_DURATION = 1.0
 
+    // --
     fileprivate var originalImage: UIImage?
     fileprivate var blurWorker: FastBlurWorker?
 
+    // --
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         originalImage = image
     }
+
+    // MARK: public properties
 
     override var image: UIImage? {
         didSet {
@@ -33,7 +40,12 @@ class FastBlurImageView: UIImageView {
         }
     }
 
-    func blurAndSetImage() {
+    // --
+
+    /*
+    * Run blur process and change image with transition
+    */
+    private func blurAndSetImage() {
         guard blurRadius > 0 else {
             return
         }
