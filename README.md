@@ -2,7 +2,9 @@
 
 ## About
 
-This is demo project with very fast blurring image through Apple Accelerate framework
+This is demo project with very fast blurring image through Apple Accelerate framework.
+
+<img src="./demo.gif">
 
 ## Technology
 

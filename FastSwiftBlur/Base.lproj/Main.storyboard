@@ -19,13 +19,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="city" translatesAutoresizingMaskIntoConstraints="NO" id="7dj-TT-qBd" customClass="FastBlurImageView" customModule="FastSwiftBlur" customModuleProvider="target">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="beach" translatesAutoresizingMaskIntoConstraints="NO" id="7dj-TT-qBd" customClass="FastBlurImageView" customModule="FastSwiftBlur" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="375" height="375"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="7dj-TT-qBd" secondAttribute="height" multiplier="1:1" id="yGW-U2-hDs"/>
                                 </constraints>
                             </imageView>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="brI-XN-yFa">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="brI-XN-yFa">
                                 <rect key="frame" x="14" y="732" width="347" height="31"/>
                             </slider>
                         </subviews>
@@ -50,6 +50,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="city" width="1600" height="840"/>
+        <image name="beach" width="589" height="442"/>
     </resources>
 </document>

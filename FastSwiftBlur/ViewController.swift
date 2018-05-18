@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     // -- Handlers
 
     @objc func sliderDidScroll(slider: UISlider) {
-        let maxBlur:Float = 35
+        let maxBlur:Float = 17
         let currentBlurRadius = slider.value * maxBlur
         log("View Controller: set blur radius to \(currentBlurRadius)")
         self.imageView.blurRadius = currentBlurRadius
