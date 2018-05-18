@@ -19,7 +19,7 @@ class FastBlurManager {
 
     // --
     fileprivate var isRendering: Bool = false
-    fileprivate var tasks: [FastBlurTask] = []
+    fileprivate var tasks: SynchronizedArray<FastBlurTask> = SynchronizedArray()
     fileprivate let blurQueue: DispatchQueue = DispatchQueue(label: "ru.aspirity.fastblurmanager", qos: .background)
 
     // --
@@ -35,10 +35,6 @@ extension FastBlurManager {
 
     /*
     * Blurring only image, without optimized cache
-    * image
-    * imageView
-    * radius
-    * callback
     */
     static func renderBlur(for image: UIImage?, with imageView: UIImageView?, radius: Float, callback: ((UIImage?) -> Void)?) {
         guard image != nil else {
@@ -54,10 +50,6 @@ extension FastBlurManager {
 
     /*
     * Blurring image with optimized cache
-    * worker
-    * imageView
-    * radius
-    * callback
     */
     static func renderBlur(for worker: FastBlurWorker?, with imageView: UIImageView?, radius: Float, callback: ((UIImage?) -> Void)?) {
         guard worker?.image != nil else {
@@ -72,8 +64,6 @@ extension FastBlurManager {
 
 }
 
-// MARK: Util methods
-
 /*
 * Queue implementation for blurring
 */
@@ -81,7 +71,7 @@ fileprivate extension FastBlurManager {
 
     func addTask(task: FastBlurTask) {
         log("add task")
-        tasks.append(task)
+        tasks.add(task)
     }
 
     func startRendering() {
@@ -101,19 +91,14 @@ fileprivate extension FastBlurManager {
             return
         }
 
-        let last = tasks.removeLast()
-        removeTasks(similarTo: last)
-        execute(task: last)
-    }
-
-    func removeTasks(similarTo task: FastBlurTask) {
-        let lockTasks = NSLock() // TODO: check global const
-        lockTasks.lock()
-        self.tasks = self.tasks.filter { [unowned task] element in
-            element.imageView == nil || element.imageView != task.imageView
+        guard let last: FastBlurTask = tasks.removeLast() else {
+            renderNextImage()
+            return
         }
-        log("removed similar tasks, total tasks count: \(tasks.count)")
-        lockTasks.unlock()
+        tasks.filter(by: { (element: FastBlurTask ) in
+            return (element.imageView == nil || element.imageView != last.imageView)
+        })
+        execute(task: last)
     }
 
     func execute(task: FastBlurTask) {
@@ -124,12 +109,10 @@ fileprivate extension FastBlurManager {
             return
         }
 
-        blurQueue.async {
-            /* [unowned self, unowned task, unowned image]*/ () in
+        blurQueue.async { () in
             let blurred: UIImage? = task.getBlurredImage()
 
-            DispatchQueue.main.async {
-                /*[unowned self, unowned task, weak blurred]*/ () in
+            DispatchQueue.main.async { [unowned self] () in
                 self.complete(task: task, blurredImage: blurred)
                 self.renderNextImage()
             }
@@ -147,7 +130,7 @@ fileprivate extension FastBlurManager {
 
 }
 
-// MARK: queue item
+// --
 
 /*
 * Item for blurring queue
@@ -207,6 +190,49 @@ fileprivate class FastBlurTask: CustomStringConvertible {
         } else {
             return image?.fastBlur(radius: blurRadius, scaledTo: imageViewSizeInPixels)
         }
+    }
+
+}
+
+// --
+
+/*
+* Utility class for synchronized working with array
+*/
+fileprivate class SynchronizedArray<Element> {
+
+    private let innerQueue: DispatchQueue = DispatchQueue(label: "ru.apsirity.fastblurtasks", qos: .background)
+    private var array: [Element] = []
+
+    init() {
+    }
+
+    var count: Int {
+        var result = 0
+        innerQueue.sync { () in
+            result = self.array.count
+        }
+        return result
+    }
+
+    func add(_ task: Element) {
+        innerQueue.async { () in
+            self.array.append(task)
+        }
+    }
+
+    func filter(by isIncluded: @escaping (Element) -> Bool) {
+        innerQueue.async { () in
+            self.array = self.array.filter(isIncluded)
+        }
+    }
+
+    func removeLast() -> Element? {
+        var task: Element?
+        innerQueue.sync { () in
+            task = self.array.removeLast()
+        }
+        return task
     }
 
 }
