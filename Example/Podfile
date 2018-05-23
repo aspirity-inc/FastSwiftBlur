@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'FastSwiftBlur_Example' do
+  pod 'FastSwiftBlur', :path => '../'
+
+  target 'FastSwiftBlur_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

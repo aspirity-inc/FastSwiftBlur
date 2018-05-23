@@ -1,0 +1,6 @@
+framework module FastSwiftBlur {
+  umbrella header "FastSwiftBlur-umbrella.h"
+
+  export *
+  module * { export * }
+}

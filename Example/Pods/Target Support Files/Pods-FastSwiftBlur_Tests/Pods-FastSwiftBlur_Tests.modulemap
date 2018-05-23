@@ -1,0 +1,6 @@
+framework module Pods_FastSwiftBlur_Tests {
+  umbrella header "Pods-FastSwiftBlur_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

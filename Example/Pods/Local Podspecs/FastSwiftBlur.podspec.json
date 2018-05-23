@@ -1,0 +1,22 @@
+{
+  "name": "FastSwiftBlur",
+  "version": "0.1.0",
+  "summary": "A short description of FastSwiftBlur.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/Maxim Krupin/FastSwiftBlur",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Maxim Krupin": "mkrupin@aspirity.com"
+  },
+  "source": {
+    "git": "https://github.com/Maxim Krupin/FastSwiftBlur.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "FastSwiftBlur/Classes/**/*"
+}

@@ -16,14 +16,14 @@ In this project we used some optimization magic. First of all image is downscale
 
 - You can use `FastBlurImageView` instead of `UIImageView` and set blurRadius in it.
 
-```
+```swift
     let imageView = FastBlurImageView()
     imageView.blurRadius = 5
 ```
 
 - You can use `FastBlurManager` directly.
 
-```
+```swift
     FastBlurManager.renderBlur(for: blurWorker, with: self, radius: blurRadius,
             callback: { [weak self] blurredImage in
                 self?.setImage(image: blurredImage)
@@ -32,11 +32,15 @@ In this project we used some optimization magic. First of all image is downscale
 
 - You can use `UIImage` extension.
 
-```
+```swift
     let myImage = UIImage(named: "blur_me")
     let blurredResult = myImage.fastBlur(radius: 10, scaledTo: CGSize(width: 100, height: 100))
 ```
- 
+
+## Example
+
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
+
 ## License
 
-`FastSwiftBlur` is available under the `MIT license`.
+FastSwiftBlur is available under the MIT license. See the LICENSE file for more info.
